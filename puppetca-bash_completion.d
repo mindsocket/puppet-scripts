@@ -30,3 +30,4 @@ _puppetca()
 }
 
 complete -F _puppetca puppetca
+complete -F _puppetca puppet cert
