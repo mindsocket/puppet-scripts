@@ -12,6 +12,11 @@ _puppetca()
     return 0
   fi
 
+  if [[ ${prev} == "--sign" ]] ; then
+     COMPREPLY=( $( compgen -W "$( ls /var/lib/puppet/ssl/ca/requests/*.pem 2>/dev/null | xargs -I {} basename {} .pem)" -- ${cur} ) )
+     return 0
+  fi
+
   if [[ ${prev} == "--clean" ]] ; then
      COMPREPLY=( $( compgen -W "$( ls /var/lib/puppet/ssl/ca/signed/*.pem 2>/dev/null | xargs -I {} basename {} .pem )" -- ${cur} ) )
      return 0
