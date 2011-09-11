@@ -6,10 +6,10 @@
 
 LINT="/var/lib/gems/1.8/bin/puppet-lint"
 
-find $1 -iname "*pp" | while read file; do
+find "$*" -iname "*pp" | while read file; do
   _TMP=$(mktemp -p /tmp/ puppet-lint.XXXX)
   echo "# puppet-lint ${file}"
-  ${LINT} ${file} > ${_TMP}
+  ${LINT} "${file}" > ${_TMP}
   
   _WARN=$(grep ^WARNING ${_TMP} | wc -l)
   _ERR=$(grep ^ERROR ${_TMP} | wc -l)
