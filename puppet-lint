@@ -6,7 +6,7 @@
 
 LINT="/var/lib/gems/1.8/bin/puppet-lint"
 
-find "$*" -iname "*pp" | while read file; do
+find "$1" -iname "*pp" | while read file; do
   _TMP=$(mktemp -p /tmp/ puppet-lint.XXXX)
   echo "# puppet-lint ${file}"
   ${LINT} "${file}" > ${_TMP}
@@ -16,14 +16,15 @@ find "$*" -iname "*pp" | while read file; do
 
   if [ ${_WARN} -ge 1 ]; then
     echo "Warnings from puppet-lint for ${file}:"
-    grep ^WARNING ${_TMP}
-  fi
+    grep ^WARNING ${_TMP} | awk "{ print \"${file#$1/}\", \$0 }"
+fi
 
   if [ ${_ERR} -ge 1 ]; then
     echo "Errors from puppet-lint for ${file}"
-    grep ^ERROR ${_TMP}
+    grep ^ERROR ${_TMP} | awk "{ print \"${file#$1/}\", \$0 }"
   fi 
 
   rm ${_TMP}
   test ${_ERR} -ge 1 && exit 1
 done
+exit 0
